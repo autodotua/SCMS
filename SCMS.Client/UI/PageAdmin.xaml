@@ -1,0 +1,152 @@
+﻿<Page x:Class="SCMS.Client.UI.PageAdmin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCMS.Client.UI"
+       xmlns:win10="clr-namespace:FzLib.Control.Win10Style;assembly=FzWpfControlLib"
+        
+
+      xmlns:flat="clr-namespace:FzLib.Control.FlatStyle;assembly=FzWpfControlLib"
+        mc:Ignorable="d"
+        x:Name="win"
+      
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Loaded="Window_Loaded"
+        Title="WinStudentManager">
+    <Page.Resources>
+        <local:GenderConverter x:Key="genderConverter"/>
+        <ContextMenu x:Key="menu">
+            <MenuItem Header="删除" Click="MenuDeleteClick"/>
+        </ContextMenu>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="28" Text="欢迎登录，管理员" />
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="16"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="16"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column="1" Grid.Row="2" Grid.RowSpan="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="4" Background="Gray"/>
+            <GridSplitter Grid.Column="3" Grid.Row="2" Grid.RowSpan="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="4" Background="Gray"/>
+
+            <TextBlock FontSize="24" Text="学生表"/>
+            <TextBlock FontSize="24" Grid.Column="2" Text="教师表"/>
+            <TextBlock FontSize="24" Grid.Column="4" Text="课程表"/>
+            <win10:AzureDataGrid x:Name="dgrdStudents" Grid.Row="2" Grid.Column="0" 
+                                 SelectionMode="Extended" ItemsSource="{Binding Students}" 
+                                 AutoGenerateColumns="False"  CanUserAddRows="False" 
+                                 CanUserDeleteRows="True" RowEditEnding="DgrdStudentsRowEditEnding"
+                                 ContextMenu="{StaticResource menu}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"  IsReadOnly="True"/>
+                    <DataGridTextColumn Header="姓名" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="性别"  Binding="{Binding Gender, Converter={StaticResource genderConverter}}"/>
+                    <DataGridTextColumn Header="专业" Binding="{Binding Major}"/>
+                    <DataGridTextColumn Header="出生日期" Binding="{Binding Born}"/>
+                    <DataGridTextColumn Header="入学日期" Binding="{Binding StartYear}"/>
+                    <DataGridTemplateColumn Header="操作">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <flat:Button Content="重置密码" Click="ResetPasswordButtonClick"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </win10:AzureDataGrid>
+            <win10:AzureDataGrid  x:Name="dgrdTeachers" Grid.Row="2"  
+                                  Grid.Column="2" SelectionMode="Extended"
+                                  ItemsSource="{Binding Teachers}" AutoGenerateColumns="False"
+                                  CanUserAddRows="False" CanUserDeleteRows="True" 
+                                  RowEditEnding="DgrdStudentsRowEditEnding"
+                                       ContextMenu="{StaticResource menu}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="姓名" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="性别"  Binding="{Binding Gender, Converter={StaticResource genderConverter}}"/>
+                    <DataGridTextColumn Header="出生日期" Binding="{Binding Born}"/>
+                    <DataGridTemplateColumn Header="操作">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <flat:Button Content="重置密码" Click="ResetPasswordButtonClick"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+            </win10:AzureDataGrid>
+            <win10:AzureDataGrid  x:Name="dgrdCourses" 
+                                  Grid.Row="2"  Grid.Column="4" 
+                                  SelectionMode="Extended" ItemsSource="{Binding Courses}"
+                                  AutoGenerateColumns="False"  CanUserAddRows="False"
+                                  CanUserDeleteRows="True" RowEditEnding="DgrdStudentsRowEditEnding"
+                                       ContextMenu="{StaticResource menu}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="课程名" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="教师" Binding="{Binding Teacher}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="开课学年" Binding="{Binding Year }"/>
+                    <DataGridTextColumn Header="开课学期" Binding="{Binding Term}"/>
+                    <DataGridTextColumn Header="学分" Binding="{Binding Credit}"/>
+                </DataGrid.Columns>
+            </win10:AzureDataGrid>
+
+
+            <WrapPanel Orientation="Horizontal" Grid.Row="4" Grid.ColumnSpan="100">
+                <GroupBox Header="新增条目">
+                    <StackPanel Orientation="Horizontal">
+                        <flat:Button Margin="4" Content="新增学生" Click="AddNewItemButtonClick" Tag="0"/>
+                        <flat:Button Margin="4" Content="新增教师" Click="AddNewItemButtonClick" Tag="1"/>
+                        <flat:Button Margin="4" Content="新增课程" Click="AddNewItemButtonClick" Tag="2"/>
+
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="更新数据到服务器">
+                    <StackPanel Orientation="Horizontal">
+                        <flat:Button Margin="4" Content="更新学生和教师" Click="UpdatePersonsButtonClick"/>
+                        <flat:Button  Margin="4" Content="更新课程" Click="UpdateCourseButtonClick"/>
+
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="获取关联信息">
+                    <StackPanel Orientation="Horizontal">
+                        <flat:Button  Margin="4" Content="查看包含该学生的课程" Click="GetCoursesOfStudentButtonClick"/>
+                        <flat:Button  Margin="4" Content="查看该教师对应的课程" Click="GetCoursesOfTeacherButtonClick"/>
+                        <flat:Button  Margin="4" Content="查看课程对应的学生和教师" Click="GetStudentsAndTeacherButtonClick"/>
+
+
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="设置关联信息">
+                    <StackPanel Orientation="Horizontal">
+                        <flat:Button  Margin="4" Content="设置教课教师与选课学生" Click="SetStudentsAndTeacherOfCourseButtonClick"/>
+                    </StackPanel>
+                </GroupBox>
+            </WrapPanel>
+
+        </Grid>
+
+
+    </Grid>
+</Page>

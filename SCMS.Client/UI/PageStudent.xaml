@@ -1,0 +1,56 @@
+﻿<Page x:Class="SCMS.Client.UI.PageStudent"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCMS.Client.UI"
+       xmlns:win10="clr-namespace:FzLib.Control.Win10Style;assembly=FzWpfControlLib"
+        xmlns:flat="clr-namespace:FzLib.Control.FlatStyle;assembly=FzWpfControlLib"
+        mc:Ignorable="d"
+        x:Name="win"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Loaded="Window_Loaded"
+        Title="学生成绩管理" >
+    <Grid Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="28" >
+            <Run Text="欢迎登录，"/>
+            <Run Text="{Binding Student.Name}"/>
+            <Run Text="同学"/>
+        </TextBlock>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0"/>
+                <ColumnDefinition Width="0"/>
+            </Grid.ColumnDefinitions>
+            <!--<GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="4" Background="Gray"/>-->
+            <!--<flat:UneditableComboBox ItemsSource="{Binding TeacherCourses}" SelectedItem="{Binding SelectedStudentCourse}"/>-->
+            <win10:AzureDataGrid x:Name="dgrdCourses" Grid.Row="2" ItemsSource="{Binding StudentCourses}"  AutoGenerateColumns="False"  CanUserAddRows="False" CanUserDeleteRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="课程号" Binding="{Binding CourseId}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="课程名" Binding="{Binding CourseName}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="上课教师" Binding="{Binding CourseTeacher}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="上课学年" Binding="{Binding Year}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="上课学期" Binding="{Binding Term}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="成绩" Binding="{Binding Score}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="学分" Binding="{Binding Credit}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="绩点" Binding="{Binding GradePoint}" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </win10:AzureDataGrid>
+            <!--<win10:AzureDataGrid x:Name="dgrdScores" Grid.Column="2"  ItemsSource="{Binding Scores}" AutoGenerateColumns="False"  CanUserAddRows="False" CanUserDeleteRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="学生姓名" Binding="{Binding Student}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="成绩" Binding="{Binding Score}"/>
+                </DataGrid.Columns>
+            </win10:AzureDataGrid>-->
+
+        </Grid>
+
+    </Grid>
+</Page>
