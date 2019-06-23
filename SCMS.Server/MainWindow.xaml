@@ -38,9 +38,11 @@
             <flat:TextBox Grid.Column="2" Text="{Binding Config.DbConnectionString}"/>
             <flat:TextBox Grid.Column="2" Grid.Row="2" Text="{Binding Config.DeviceIP}"/>
             <flat:TextBox Grid.Column="2" Grid.Row="4" Text="{Binding Config.Port}"/>
-            <flat:Button x:Name="btnStart" Grid.Row="6" Grid.ColumnSpan="3" Content="启动" Click="Button_Click"/>
+            <flat:Button x:Name="btnStart" Grid.Row="6" Grid.ColumnSpan="3" 
+                       IsDefault="True"  Content="启动" Click="Button_Click"/>
         </Grid>
-        <flat:ListView x:Name="lvwLog" ItemsSource="{Binding Logs}" Grid.Column="2">
+        <flat:ListView x:Name="lvwLog" ItemsSource="{Binding Logs}"
+                       Grid.Column="2" ItemPreviewMouseDoubleClick="LvwLog_ItemPreviewMouseDoubleClick">
             <flat:ListView.View>
                 <GridView>
                     <GridViewColumn Header="时间" DisplayMemberBinding="{Binding Time}"/>

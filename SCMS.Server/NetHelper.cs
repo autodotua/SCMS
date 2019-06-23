@@ -35,7 +35,7 @@ namespace SCMS.Server
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                (Application.Current.MainWindow as MainWindow).AddLog("服务器开启", "");
+                (Application.Current.MainWindow as MainWindow).AddLog("服务器开启", "", "","");
             });
             string host = Config.Instance.DeviceIP;//IP地址
             int port = Config.Instance.Port;//端口
@@ -93,7 +93,7 @@ namespace SCMS.Server
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        (Application.Current.MainWindow as MainWindow).AddLog("服务器发生异常，已退出", "");
+                        (Application.Current.MainWindow as MainWindow).AddLog("服务器发生异常，已退出", "", "", "");
                     });
                     Debug.WriteLine(ex.Message);
                     clientSocket.Shutdown(SocketShutdown.Both);//禁止发送和上传
@@ -186,11 +186,12 @@ namespace SCMS.Server
 
                 else
                 {
-                    sendStr = JsonConvert.SerializeObject(new { OK = false, Message = "未知API" });
+                    (Application.Current.MainWindow as MainWindow).AddLog("接收到客户端请求，无法识别，类型：" + command, ip, message, sendStr);
+                    return JsonConvert.SerializeObject(new { OK = false, Message = "未知API" });
                 }
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    (Application.Current.MainWindow as MainWindow).AddLog("接收到客户端请求，类型：" + command, ip);
+                    (Application.Current.MainWindow as MainWindow).AddLog("接收到客户端请求，类型：" + command, ip, message,sendStr);
                 });
             }
             catch (Exception ex)
@@ -203,7 +204,7 @@ namespace SCMS.Server
                 sendStr = JsonConvert.SerializeObject(new { OK = false, ex.Message });
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    (Application.Current.MainWindow as MainWindow).AddLog("接收到客户端请求，但运行错误", ip);
+                    (Application.Current.MainWindow as MainWindow).AddLog("接收到客户端请求，但处理发生异常", ip,message,"");
                 });
             }
             return sendStr;

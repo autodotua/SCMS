@@ -1,4 +1,7 @@
-﻿using System;
+﻿/*
+编写人员：方震
+*/
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;

@@ -25,18 +25,6 @@ using System.Windows.Shapes;
 
 namespace SCMS.Server
 {
-    public class LogInfo
-    {
-        public LogInfo(string content,string ip)
-        {
-            Time = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss");
-            IP = ip;
-            Content = content;
-        }
-        public string IP { get; }
-        public string Time { get; }
-        public string Content { get; }
-    }
 
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -103,9 +91,9 @@ namespace SCMS.Server
 
 
 
-        public void AddLog(string content,string ip)
+        public void AddLog(string content,string ip, string receive,string send)
         {
-            LogInfo log = new LogInfo(content,ip);
+            LogInfo log = new LogInfo(content,ip,receive,send);
             Logs.Add(log);
             lvwLog.ScrollIntoView(log);
         }
@@ -121,6 +109,15 @@ namespace SCMS.Server
 //            Button_Click(null, null);
 //            WindowState = WindowState.Minimized;
 //#endif
+        }
+
+        private void LvwLog_ItemPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(lvwLog.SelectedItem!=null &&!string.IsNullOrEmpty((lvwLog.SelectedItem as LogInfo).Receive))
+            {
+                LogInfo log = lvwLog.SelectedItem as LogInfo;
+                new LogDetailWindow(log.Receive, log.Send) { Owner = this }.Show();
+            }
         }
     }
 }

@@ -44,27 +44,26 @@ namespace SCMS.Client
         {
             return Task.Run(() =>
              {
-                //设定服务器IP地址  
-                IPAddress ip = IPAddress.Parse(Config.Instance.ServerIP);
+                 //设定服务器IP地址  
+                 IPAddress ip = IPAddress.Parse(Config.Instance.ServerIP);
                  Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                  try
                  {
-                    //尝试连接服务器
-                    clientSocket.Connect(new IPEndPoint(ip, Config.Instance.ServerPort)); //配置服务器IP与端口  
-                }
+                     //尝试连接服务器
+                     clientSocket.Connect(new IPEndPoint(ip, Config.Instance.ServerPort)); //配置服务器IP与端口  
+                 }
                  catch
                  {
-                    //返回错误信息
-                    return JsonConvert.SerializeObject(new { OK = false, Message = $"无法连接到服务器{Config.Instance.ServerIP}:{Config.Instance.ServerPort}" });
+                     //返回错误信息
+                     return JsonConvert.SerializeObject(new { OK = false, Message = $"无法连接到服务器{Config.Instance.ServerIP}:{Config.Instance.ServerPort}" });
                  }
+                 //向服务器发送数据
+                 clientSocket.Send(Encoding.UTF8.GetBytes(message));
 
-                 clientSocket.Send(Encoding.UTF8.GetBytes(message));//向服务器发送数据，需要发送中文则需要使用Encoding.UTF8.GetBytes()，否则会乱码
-
-                //接受从服务器返回的信息
-                byte[] buffer = new byte[1024 * 1024];
-                 int length = clientSocket.Receive(buffer, buffer.Length, 0);    //从服务器端接受返回信息 
-                                                                                 //将服务器返回的信息转换为字符串
-                string str = Encoding.UTF8.GetString(buffer, 0, length);
+                 //接受从服务器返回的信息
+                 byte[] buffer = new byte[1024 * 1024 * 5];
+                 int length = clientSocket.Receive(buffer, buffer.Length, 0);
+                 string str = Encoding.UTF8.GetString(buffer, 0, length);
                  clientSocket.Close();
                  return str;
              });
